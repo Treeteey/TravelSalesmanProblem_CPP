@@ -95,11 +95,7 @@ class Graph{
         void FillDistances();
 };
 
-
-
-std::vector<int> FindPathThroughAllPoints(Graph& g, int start);
-double CalculatePathCost(const Graph& g, const std::vector<int>& path);
-void PrintPath(const std::vector<int>& path, double cost);
-
+std::vector<int> BFS(int start, int end, const Graph &graph);
+double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullPath);
 void Run(Graph& g);
 

@@ -7,7 +7,8 @@ int main() {
     double price = 10;
     Graph g(number, radius, price);
     g.PrintGraph();
-
+    std::vector<int> path;
+    double total_cost = FindShortestPath(g, 0, 99, path);
     Run(g);  
     return 0;
 }

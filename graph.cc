@@ -54,9 +54,7 @@ void Graph::CreateNeighbours(int min_neighbors, int max_neighbors) {
 
     for (int i = 0; i < points_.size(); ++i) {
         // Случайное число соседей для текущей точки
-        // int rand_number_neighbors = RandomInt(min_neighbors, max_neighbors);
         int rand_number_neighbors = dis_int(e);
-        std::cout << rand_number_neighbors << std::endl;
 
         while (points_[i].neighbours_.size() < rand_number_neighbors) {
             int index = dis(e);
