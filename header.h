@@ -25,11 +25,12 @@ class Point{
         Point(double x, double y) : x_(x), y_(y) {}
 
         void print(){
-            std::cout << x_ << " " << y_ << std::endl;
+            std::cout << x_ << " " << y_;
             std::cout << "  (";
             for(auto neighbor : neighbours_){
                 std::cout << neighbor << " ";
             }
+            std::cout << ")" << std::endl;
         }
 
         bool operator==(const Point& other) const {
@@ -70,8 +71,9 @@ class Graph{
         }
 
         void PrintGraph(){
-            for(auto point : points_){
-                point.print();
+            for(int i = 0; i < number_; ++i){
+                std::cout << i << " ";
+                points_[i].print();
             }
         }
 
@@ -89,3 +91,11 @@ class Graph{
         double Distance(const Point& a, const Point& b);
         void CreateNeighbours(int min_neighbors, int max_neighbors);
 };
+
+
+
+std::vector<int> FindPathThroughAllPoints(Graph& g, int start);
+double CalculatePathCost(const Graph& g, const std::vector<int>& path);
+void PrintPath(const std::vector<int>& path, double cost);
+void Run(Graph& g);
+
