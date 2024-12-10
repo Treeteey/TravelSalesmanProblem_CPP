@@ -2,8 +2,9 @@
 g++ window.cc graph.cc -lsfml-graphics -lsfml-window -lsfml-system
 
 */
-#include "header.h"
 #include <SFML/Graphics.hpp>
+#include "header.h"
+
 
 
 const double WINDOW_SIZE = 800;

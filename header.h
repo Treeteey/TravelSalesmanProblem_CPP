@@ -9,10 +9,12 @@ sudo apt -y install build-essential
 #include <iostream>
 #include <vector>
 #include <unordered_set>
+#include <map>
 #include <random>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+
 
 
 
@@ -33,12 +35,10 @@ class Point{
             std::cout << ")" << std::endl;
         }
 
+    private:
         bool operator==(const Point& other) const {
             return x_ == other.x_ && y_ == other.y_;
         }
-
-    private:
-
 
 };
 
@@ -58,6 +58,7 @@ class Graph{
             price_ = 10;
             ClearDistances();  
             CreatePoints(radius_, number_);
+            FillDistances();
             CreateNeighbours(2, 6);
         };
 
@@ -67,6 +68,7 @@ class Graph{
             price_ = price;
             ClearDistances();  
             CreatePoints(radius_, number_);
+            FillDistances();
             CreateNeighbours(2, 6);                 
         }
 
@@ -90,6 +92,7 @@ class Graph{
         void CreatePoints(double radius, int count);
         double Distance(const Point& a, const Point& b);
         void CreateNeighbours(int min_neighbors, int max_neighbors);
+        void FillDistances();
 };
 
 
@@ -97,5 +100,6 @@ class Graph{
 std::vector<int> FindPathThroughAllPoints(Graph& g, int start);
 double CalculatePathCost(const Graph& g, const std::vector<int>& path);
 void PrintPath(const std::vector<int>& path, double cost);
+
 void Run(Graph& g);
 

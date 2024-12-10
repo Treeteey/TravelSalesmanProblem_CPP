@@ -8,6 +8,6 @@ int main() {
     Graph g(number, radius, price);
     g.PrintGraph();
 
-    // Run(g);  
+    Run(g);  
     return 0;
 }
