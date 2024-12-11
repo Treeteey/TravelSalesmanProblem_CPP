@@ -6,14 +6,17 @@ int main() {
     1 пиксель = единица длины
      */ 
     double radius = 380; 
-    int number = 100;
+    int number = 10;
     double price = 10;
     Graph g(number, radius, price);
+
+    int start = 0;
+    int end = number-1;
 
     g.PrintGraph();
 
     std::vector<int> path;
-    FindShortestPath(g, 0, number-1, path);
+    FindShortestPath(g, start, end, path);
     
     std::cout << "Number of visited points = " << path.size();
     
