@@ -43,6 +43,7 @@ class Graph{
         int number_;
         double radius_;
         double price_;
+        double total_length_;
         std::vector<std::vector<double>> distances_;
 
         Graph();
@@ -62,7 +63,7 @@ class Graph{
 
 // solution.cc functions
 std::vector<int> BFS(int start, int end, const Graph &graph);
-double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullPath);
+void FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullPath);
 void SearchClosestNeighbour(Graph &graph, std::vector<bool> &visited,std::vector<int> &back,
                             int &back_size, int &next_point, int& current);
 void SearchNextPoint(Graph &graph, int &back_size, int &next_point, 
@@ -72,5 +73,6 @@ void AddSubpath(std::vector<int>& fullpath, std::vector<int>& subpath,
                 double& total_distance, Graph& graph, std::vector<bool>& visited);
 
 // window.cc functions
-void Run(Graph& g);
+void Run(Graph& g, int window_size);
+// void DrawCircle(Graph& g, int window_size, RenderWindow &window);
 

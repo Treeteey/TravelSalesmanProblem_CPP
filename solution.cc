@@ -105,7 +105,7 @@ vector<int> BFS(int start, int end, const Graph &graph) {
  * @return The total length of the path.
  * @note Uses a breadth-first search (BFS) algorithm to find the shortest path.
  */
-double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullpath) {
+void FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullpath) {
     int n = graph.number_;
     // вектор посещенных точек
     std::vector<bool> visited(n, false);
@@ -171,13 +171,13 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
             AddSubpath(fullpath, subPath, total_distance, graph, visited);
         }
     }
-    
+
+    graph.total_length_ = total_distance;
     // std::cout  << "Visited: \n";
     // for(auto n : visited){
     //     std::cout << n << " ";
     // }
     // std::cout << std::endl;
-    return total_distance;
 }
 
 

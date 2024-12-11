@@ -2,18 +2,30 @@
 
 
 int main() {
-    double radius = 370; // Радиус окружности в пикселях
+    /*Радиус окружности в пикселях
+    1 пиксель = единица длины
+     */ 
+    double radius = 370; 
     int number = 100;
     double price = 10;
     Graph g(number, radius, price);
+
     g.PrintGraph();
+
     std::vector<int> path;
-    double total_length = FindShortestPath(g, 0, number-1, path);
+    FindShortestPath(g, 0, number-1, path);
+    
     std::cout << "Number of visited points = " << path.size();
     
+    // path
     for(auto i : path) std::cout << " " << i;
     std::cout << std::endl;
-    std::cout << "Total distance = " << total_length << std::endl;
-    Run(g);  
+
+    // total distance to travel through all points
+    std::cout << "Total distance = " << g.total_length_ << std::endl;
+
+    // show graph
+    int window_size = 800;
+    Run(g, window_size);  
     return 0;
 }

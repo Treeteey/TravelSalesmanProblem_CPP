@@ -7,13 +7,9 @@ g++ window.cc graph.cc -lsfml-graphics -lsfml-window -lsfml-system
 #include "header.h"
 
 
-
-const double WINDOW_SIZE = 800;
-
-
-void Run(Graph& g){
+void Run(Graph& g, int window_size){
     // Инициализация SFML
-    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "Graph");
+    sf::RenderWindow window(sf::VideoMode(window_size, window_size), "Graph");
     window.setFramerateLimit(30);
 
     // Создаем шрифт
@@ -26,7 +22,7 @@ void Run(Graph& g){
     text.setFont(font);
     text.setCharacterSize(10);
     text.setFillColor(sf::Color::Black);
-    int circle_raduis_ = WINDOW_SIZE/100;
+    int circle_raduis_ = window_size/100;
 
     // Основной цикл
     while (window.isOpen()) {
@@ -43,7 +39,7 @@ void Run(Graph& g){
         // Рисуем круг
         sf::CircleShape circle(g.radius_);
         circle.setOrigin(g.radius_, g.radius_);
-        circle.setPosition(WINDOW_SIZE / 2, WINDOW_SIZE / 2);
+        circle.setPosition(window_size / 2, window_size / 2);
         circle.setFillColor(sf::Color(240, 240, 240));
         circle.setOutlineThickness(2);
         circle.setOutlineColor(sf::Color::Black);
@@ -51,14 +47,14 @@ void Run(Graph& g){
 
         // Рисуем ребра
         for (int i = 0; i < g.points_.size(); ++i){
-            double x = WINDOW_SIZE / 2 + g.points_[i].x_;
-            double y = WINDOW_SIZE / 2 + g.points_[i].y_;
+            double x = window_size / 2 + g.points_[i].x_;
+            double y = window_size / 2 + g.points_[i].y_;
             
             for (int neighbor_index : g.points_[i].neighbours_) {
                 auto& neighbor = g.points_[neighbor_index];
                 sf::Vertex line[] = {
                     sf::Vertex(sf::Vector2f(x + circle_raduis_, y + circle_raduis_), sf::Color::Blue),
-                    sf::Vertex(sf::Vector2f(WINDOW_SIZE / 2 + neighbor.x_ + circle_raduis_, WINDOW_SIZE / 2 + neighbor.y_ + circle_raduis_), sf::Color::Blue)
+                    sf::Vertex(sf::Vector2f(window_size / 2 + neighbor.x_ + circle_raduis_, window_size / 2 + neighbor.y_ + circle_raduis_), sf::Color::Blue)
                 };
                 window.draw(line, 2, sf::Lines);
             }
@@ -68,34 +64,17 @@ void Run(Graph& g){
         for (int i = 0; i < g.points_.size(); ++i) {
             
             sf::CircleShape pointShape(circle_raduis_);
-            double x = WINDOW_SIZE / 2 + g.points_[i].x_;
-            double y = WINDOW_SIZE / 2 + g.points_[i].y_;
+            double x = window_size / 2 + g.points_[i].x_;
+            double y = window_size / 2 + g.points_[i].y_;
             pointShape.setPosition(x, y);
             pointShape.setFillColor(sf::Color::Red);
             window.draw(pointShape);
-
-            // // Рисуем ребра
-            // for (int neighbor_index : g.points_[i].neighbours_) {
-            //     auto& neighbor = g.points_[neighbor_index];
-            //     sf::Vertex line[] = {
-            //         sf::Vertex(sf::Vector2f(x + circle_raduis_, y + circle_raduis_), sf::Color::Blue),
-            //         sf::Vertex(sf::Vector2f(WINDOW_SIZE / 2 + neighbor.x_ + circle_raduis_, WINDOW_SIZE / 2 + neighbor.y_ + circle_raduis_), sf::Color::Blue)
-            //     };
-            //     window.draw(line, 2, sf::Lines);
-            // }            
-
-            // // добавим номер точки
-            // text.setString(std::to_string(i));
-            // // text.setPosition(x + circle_raduis_/2, y + circle_raduis_/2);
-            // text.setOrigin(text.getLocalBounds().width / 2, text.getLocalBounds().height / 2);
-            // text.setPosition(x + circle_raduis_, y + circle_raduis_);
-            // window.draw(text);
         }
 
         // добавим номер точки
         for (int i = 0; i < g.points_.size(); ++i) {
-            double x = WINDOW_SIZE / 2 + g.points_[i].x_;
-            double y = WINDOW_SIZE / 2 + g.points_[i].y_;
+            double x = window_size / 2 + g.points_[i].x_;
+            double y = window_size / 2 + g.points_[i].y_;
 
             text.setString(std::to_string(i));
             // text.setPosition(x + circle_raduis_/2, y + circle_raduis_/2);
