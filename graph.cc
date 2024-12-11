@@ -23,6 +23,16 @@ int RandomInt(int min, int max){
 }
 
 
+void Point::print(){
+    std::cout << x_ << " " << y_;
+    std::cout << "  (";
+    for(auto neighbor : neighbours_){
+        std::cout << neighbor << " ";
+    }
+    std::cout << ")" << std::endl;
+}
+
+
 void Graph::CreatePoints(double radius, int count){
     int temp = count;    
 
@@ -75,19 +85,9 @@ void Graph::FillDistances(){
     for(int i = 0; i < number_; i++){
         for(int neighbour : points_[i].neighbours_){
             distances_[i][neighbour] = Distance(points_[i], points_[neighbour]);
-            // distances_[neighbour][i] = distances_[i][neighbour]; 
         }
     }
 }
-
-// void Graph::FillDistances(){
-//     for(int i = 0; i < number_; i++){
-//         for(int j = 0; j < points_[j].neighbours_.size(); ++j){
-//             distances_[i][j] = Distance(points_[i], points_[j]);
-//             // distances_[j][i] = distances_[i][j];
-//         }
-//     }
-// }
 
 void Graph::PrintDistances(){
     for(int i = 0; i < number_; i++){
@@ -96,4 +96,44 @@ void Graph::PrintDistances(){
         }
         std::cout << std::endl;
     }
+}
+
+
+void Graph::ClearDistances(){
+    distances_.resize(number_, std::vector<double>(number_));
+    for(int i = 0; i < number_; i++){
+        for(int j = 0; j < number_; j++){
+            distances_[i][j] = 0;
+        }
+    }
+}
+
+
+void Graph::PrintGraph(){
+    for(int i = 0; i < number_; ++i){
+        std::cout << i << " ";
+        points_[i].print();
+    }
+}
+
+
+Graph::Graph(){
+    number_ = 100;
+    radius_ = 1;
+    price_ = 10;
+    ClearDistances();  
+    CreatePoints(radius_, number_);
+    CreateNeighbours(2, 6);
+    FillDistances();
+};
+
+
+Graph::Graph(int number, double radius, double price){
+    number_ = number;
+    radius_ = radius;            
+    price_ = price;
+    ClearDistances();  
+    CreatePoints(radius_, number_);
+    CreateNeighbours(2, 6);                 
+    FillDistances();
 }
