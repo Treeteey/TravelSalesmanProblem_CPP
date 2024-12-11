@@ -43,9 +43,11 @@ void Graph::CreatePoints(double radius, int count){
 
         double x = dis(e);
         double y = dis(e);
+        double distance = x * x + y * y;
+        double rad_sqr = radius * radius;
 
         // Optional: Recheck to ensure the point is within the circle
-        if ((x * x + y * y) <= (radius * radius)) {
+        if (distance <= rad_sqr) {
             points_.push_back(Point(x, y));
             temp--;
         }

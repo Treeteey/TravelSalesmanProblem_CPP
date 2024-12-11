@@ -59,7 +59,18 @@ class Graph{
         
 };
 
+
+// solution.cc functions
 std::vector<int> BFS(int start, int end, const Graph &graph);
 double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullPath);
+void SearchClosestNeighbour(Graph &graph, std::vector<bool> &visited,std::vector<int> &back,
+                            int &back_size, int &next_point, int& current);
+void SearchNextPoint(Graph &graph, int &back_size, int &next_point, 
+                     std::vector<bool>& visited, std::vector<int>& back);
+bool ContainsIndex(std::vector<int>& v, int index);
+void AddSubpath(std::vector<int>& fullpath, std::vector<int>& subpath,
+                double& total_distance, Graph& graph, std::vector<bool>& visited);
+
+// window.cc functions
 void Run(Graph& g);
 

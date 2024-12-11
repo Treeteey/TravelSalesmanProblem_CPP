@@ -94,22 +94,26 @@ vector<int> BFS(int start, int end, const Graph &graph) {
 }
 
 
-double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullPath) {
+
+/**
+ * @brief Finds the shortest path between two points in a graph, 
+ * visiting all points and returning the total length of the path.
+ * @param graph The graph to search.
+ * @param start The starting point.
+ * @param end The ending point.
+ * @param fullPath The vector to store the path.
+ * @return The total length of the path.
+ * @note Uses a breadth-first search (BFS) algorithm to find the shortest path.
+ */
+double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullpath) {
     int n = graph.number_;
     // вектор посещенных точек
     std::vector<bool> visited(n, false);
     visited[start] = true;
     // вектор пути
-    fullPath.clear();
-    fullPath.push_back(start);
+    fullpath.clear();
+    fullpath.push_back(start);
 
-    // лямбда для проверки наличия элемента в векторе, чтобы не дублировать
-    auto contains = [](vector<int>& v, int index){
-        for(auto n : v){
-            if(n == index){ return true;}
-        }
-        return false;
-    };
     /* Вектор back из точек, наблюдаемых по пути движения.
     будем добавлять точки и их соседей
     Вектор нужен, если настанет момент, когда все соседи
@@ -125,47 +129,19 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
     int current = start;
 
     for (int step = 1; step < n; ++step) {
-        double min_dist = std::numeric_limits<double>::infinity();
         int next_point = -1;
         // поиск ближайшего соседа current точки
-        for (auto neighbour:  graph.points_[current].neighbours_) {
-            //add to 'back' neighbours of current
-            if (!visited[neighbour]) {  
-                if(!contains(back, neighbour)){
-                    back.push_back(neighbour);
-                    back_size += 1;
-                }             
-                double dist = graph.distances_[current][neighbour];
-                if (dist < min_dist) {
-                    min_dist = dist;
-                    next_point = neighbour;
-                }
-            }
-        }
+        SearchClosestNeighbour(graph, visited, back, back_size, next_point, current);
+
         // если нет свободных ближайших точек
         // то попытаемся найти ближайшего соседа
         // рассматривая точки из back. Проверить всех соседей
         // каждой точки из вектора. Если все посещены, то удалить точку
         if (next_point == -1) {
-            bool found = false;
-            while(back_size > 0 && !found){
-                for(auto neighbour:  graph.points_[back_size-1].neighbours_){
-                    if(visited[neighbour] == false){
-                        next_point = neighbour;
-                        back.push_back(next_point);
-                        back_size += 1;
-                        found = true;
-                        break;
-                    }
-                }
-                if(next_point == -1){
-                    back.pop_back();
-                    back_size -= 1;
-                }
-            }
+            SearchNextPoint(graph, back_size, next_point, visited, back);
         }else{
             // если нашли следующую точку, то добавляем ее в вектор
-            fullPath.push_back(next_point);
+            fullpath.push_back(next_point);
             visited[next_point] = true;
             current = next_point;
             continue;
@@ -183,43 +159,83 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
             break;
         }
         // считаем расстояние и добавляем путь от  current до next_point
-        for (size_t i = 1; i < subPath.size(); ++i) {
-            total_distance += graph.distances_[subPath[i - 1]][subPath[i]];
-            if (!visited[subPath[i]]) {
-                visited[subPath[i]] = true;
-            }
-            fullPath.push_back(subPath[i]);
-        }
+        AddSubpath(fullpath, subPath, total_distance, graph, visited);
         current = next_point;
-    }
+    }// конец цикла
+
     // если последняя рассматриваемая точка не является конечной
     // то построить путь между current и end
     if (current != end) {
         std::vector<int> subPath = BFS(current, end, graph);
         if (!subPath.empty()) {
-            for (size_t i = 1; i < subPath.size(); ++i) {
-                total_distance += graph.distances_[subPath[i - 1]][subPath[i]];
-                if (!visited[subPath[i]]) {
-                    visited[subPath[i]] = true;
-                    
-                }
-                fullPath.push_back(subPath[i]);
-            }
+            AddSubpath(fullpath, subPath, total_distance, graph, visited);
         }
     }
-
-    // std::cout << "Path:" << std::endl;
-    // for (int p : fullPath) {
-    //     std::cout << std::setw(3) << p << " ";
+    
+    // std::cout  << "Visited: \n";
+    // for(auto n : visited){
+    //     std::cout << n << " ";
     // }
     // std::cout << std::endl;
-
-    std::cout << "Visited points:" << std::endl;
-    for(auto visit : visited){
-        std::cout << visit << " ";
-    }
-    std::cout << std::endl;
-    // std::cout << "Total lengh of path: " << total_distance << std::endl;
-
     return total_distance;
+}
+
+
+void SearchClosestNeighbour(Graph &graph, std::vector<bool> &visited,std::vector<int> &back,
+                            int &back_size, int &next_point, int& current){
+    double min_dist = std::numeric_limits<double>::infinity();
+    // поиск ближайшего соседа current точки
+    for (auto neighbour:  graph.points_[current].neighbours_) {
+        //add to 'back' neighbours of current
+        if (!visited[neighbour]) {  
+            if(!ContainsIndex(back, neighbour)){
+                back.push_back(neighbour);
+                back_size += 1;
+            }             
+            double dist = graph.distances_[current][neighbour];
+            if (dist < min_dist) {
+                min_dist = dist;
+                next_point = neighbour;
+            }
+        }
+    }    
+}
+
+void SearchNextPoint(Graph &graph, int &back_size, int &next_point, 
+                     std::vector<bool>& visited, std::vector<int>& back){
+    bool found = false;
+    while(back_size > 0 && !found){
+        for(auto neighbour:  graph.points_[back_size-1].neighbours_){
+            if(visited[neighbour] == false){
+                next_point = neighbour;
+                back.push_back(next_point);
+                back_size += 1;
+                found = true;
+                break;
+            }
+        }
+        if(next_point == -1){
+            back.pop_back();
+            back_size -= 1;
+        }
+    }
+}
+
+
+bool ContainsIndex(std::vector<int>& v, int index) {
+    for(auto n : v){
+        if(n == index){ return true;}
+    }
+    return false;
+}
+
+void AddSubpath(std::vector<int>& fullpath, std::vector<int>& subpath,
+                double& total_distance, Graph& graph, std::vector<bool>& visited){
+    for (size_t i = 1; i < subpath.size(); ++i) {
+        total_distance += graph.distances_[subpath[i - 1]][subpath[i]];
+        if (!visited[subpath[i]]) {
+            visited[subpath[i]] = true;
+        }
+        fullpath.push_back(subpath[i]);
+    }  
 }

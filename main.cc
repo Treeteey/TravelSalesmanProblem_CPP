@@ -14,6 +14,6 @@ int main() {
     for(auto i : path) std::cout << " " << i;
     std::cout << std::endl;
     std::cout << "Total distance = " << total_length << std::endl;
-    // Run(g);  
+    Run(g);  
     return 0;
 }
