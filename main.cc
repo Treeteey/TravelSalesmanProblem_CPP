@@ -24,6 +24,8 @@ int main() {
     // total distance to travel through all points
     std::cout << "Total distance = " << g.total_length_ << std::endl;
 
+    // g.PrintDistances();
+
     // show graph
     int window_size = 800;
     Run(g, window_size, path);  

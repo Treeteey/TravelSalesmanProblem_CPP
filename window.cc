@@ -37,6 +37,8 @@ void Run(Graph& g, int window_size, std::vector<int>& path) {
     std::vector<sf::Color> colors(g.number_, sf::Color::Red);
     colors[path[counter]] = sf::Color::Green;
 
+    double total_distance = 0;
+
     // Основной цикл
     while (window.isOpen()) {
         sf::Event event;
@@ -50,10 +52,12 @@ void Run(Graph& g, int window_size, std::vector<int>& path) {
                     if(counter < path.size() - 1){
                         counter++;
                         colors[path[counter]] = sf::Color::Green;   
+                        total_distance += g.distances_[path[counter - 1]][path[counter]];
                     }
                 }else if(event.key.code == sf::Keyboard::Left){
                     if(counter > 0){
                         colors[path[counter]] = sf::Color::Red;
+                        total_distance -= g.distances_[path[counter]][path[counter-1]];
                         counter--;
                     }
                 }
@@ -73,7 +77,7 @@ void Run(Graph& g, int window_size, std::vector<int>& path) {
         // добавим номер точки
         AddPointsNumber(g, window, window_size, circle_raduis_, text_points);
         // добавим цену
-        AddCost(g, window, text_cost);
+        AddCost(g, window, text_cost, total_distance);
 
         text_cost.setString(std::to_string(counter));
         text_cost.setPosition(10, 40);
@@ -142,8 +146,9 @@ void AddPointsNumber(Graph& g, sf::RenderWindow& window,
     }
 }
 
-void AddCost(Graph& g, sf::RenderWindow& window, sf::Text &text){
-    text.setString("Price" + std::to_string(g.price_) + "$");
+void AddCost(Graph& g, sf::RenderWindow& window, 
+             sf::Text &text, double &total_distance){
+    text.setString("Total distance:  " + std::to_string(total_distance));
     text.setPosition(10, 10);
     window.draw(text);
 }

@@ -142,6 +142,7 @@ void FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullpa
         }else{
             // если нашли следующую точку, то добавляем ее в вектор
             fullpath.push_back(next_point);
+            total_distance += graph.distances_[current][next_point];
             visited[next_point] = true;
             current = next_point;
             continue;
