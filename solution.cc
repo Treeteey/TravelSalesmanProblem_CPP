@@ -102,21 +102,21 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
     // вектор пути
     fullPath.clear();
     fullPath.push_back(start);
-    /* Стек из точек, наблюдаемых по пути движения
-    будем добавлять точки и их соседей
-    Стек нужен, если настанет момент, когда все соседи
-    текущей точки посещены -> Мы возьмем первую точку из стека,
-    так как она будет самой ближайшей к current и проверим есть ли у нее
-    непосещенные соседи
-    */
 
+    // лямбда для проверки наличия элемента в векторе, чтобы не дублировать
     auto contains = [](vector<int>& v, int index){
         for(auto n : v){
             if(n == index){ return true;}
         }
         return false;
     };
-
+    /* Вектор back из точек, наблюдаемых по пути движения.
+    будем добавлять точки и их соседей
+    Вектор нужен, если настанет момент, когда все соседи
+    текущей точки посещены -> Мы возьмем последнюю точку из Вектора,
+    так как она будет самой ближайшей к current и проверим есть ли у нее
+    непосещенные соседи. Если нет - удалить точку из вектора.
+    */
     std::vector<int> back;
     int back_size = 1;
     back.push_back(start);
@@ -129,9 +129,8 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
         int next_point = -1;
         // поиск ближайшего соседа current точки
         for (auto neighbour:  graph.points_[current].neighbours_) {
-            //add to q neighbours of current
+            //add to 'back' neighbours of current
             if (!visited[neighbour]) {  
-                // if([std::find(back.begin(), back.end(), neighbour) != back.end()]){
                 if(!contains(back, neighbour)){
                     back.push_back(neighbour);
                     back_size += 1;
@@ -145,8 +144,8 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
         }
         // если нет свободных ближайших точек
         // то попытаемся найти ближайшего соседа
-        // рассматривая точки из стека. Проверить всех соседей
-        // каждой точки из стека. Если все посещены, то удалить точку из стека
+        // рассматривая точки из back. Проверить всех соседей
+        // каждой точки из вектора. Если все посещены, то удалить точку
         if (next_point == -1) {
             bool found = false;
             while(back_size > 0 && !found){
@@ -160,27 +159,18 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
                     }
                 }
                 if(next_point == -1){
-                    std::cout << "s: ";
-                    for(int i = 0; i < back_size; ++i){
-                        std::cout << back[i] << " ";
-                    } 
-                    std::cout << std::endl;
                     back.pop_back();
                     back_size -= 1;
                 }
             }
         }else{
-            std::cout << "f: ";
-            for(int i = 0; i < back_size; ++i) {
-                std::cout << back[i] << " ";
-            }
-            std::cout << std::endl;
+            // если нашли следующую точку, то добавляем ее в вектор
             fullPath.push_back(next_point);
             visited[next_point] = true;
             current = next_point;
             continue;
         }
-        
+        // если все же не нашли следующую точку, то плохо / либо прошли все точки = хорошо
         if(next_point == -1){
             std::cout << "Error: No available point to visit." << std::endl;
             break;
@@ -192,7 +182,7 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
             std::cout << "Error: Path to point " << next_point << " unreachable." << std::endl;
             break;
         }
-
+        // считаем расстояние и добавляем путь от  current до next_point
         for (size_t i = 1; i < subPath.size(); ++i) {
             total_distance += graph.distances_[subPath[i - 1]][subPath[i]];
             if (!visited[subPath[i]]) {
@@ -202,7 +192,8 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
         }
         current = next_point;
     }
-
+    // если последняя рассматриваемая точка не является конечной
+    // то построить путь между current и end
     if (current != end) {
         std::vector<int> subPath = BFS(current, end, graph);
         if (!subPath.empty()) {
@@ -217,18 +208,18 @@ double FindShortestPath(Graph &graph, int start, int end, std::vector<int>& full
         }
     }
 
-    std::cout << "Path:" << std::endl;
-    for (int p : fullPath) {
-        std::cout << std::setw(3) << p << " ";
-    }
-    std::cout << std::endl;
+    // std::cout << "Path:" << std::endl;
+    // for (int p : fullPath) {
+    //     std::cout << std::setw(3) << p << " ";
+    // }
+    // std::cout << std::endl;
 
-    std::cout << "Visited:" << std::endl;
+    std::cout << "Visited points:" << std::endl;
     for(auto visit : visited){
         std::cout << visit << " ";
     }
     std::cout << std::endl;
-    std::cout << "Total lengh of path: " << total_distance << std::endl;
+    // std::cout << "Total lengh of path: " << total_distance << std::endl;
 
     return total_distance;
 }
