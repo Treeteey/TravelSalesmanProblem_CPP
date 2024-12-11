@@ -16,6 +16,8 @@ sudo apt -y install build-essential
 #include <cmath>
 #include <iomanip>
 
+// to draw graph
+#include <SFML/Graphics.hpp>
 
 
 
@@ -73,6 +75,38 @@ void AddSubpath(std::vector<int>& fullpath, std::vector<int>& subpath,
                 double& total_distance, Graph& graph, std::vector<bool>& visited);
 
 // window.cc functions
-void Run(Graph& g, int window_size);
-// void DrawCircle(Graph& g, int window_size, RenderWindow &window);
 
+// enum class Color {
+//     BLACK,
+//     GREEN,
+//     RED,
+//     GREY
+// };
+
+// sf::Color colors[] = {
+//     sf::Color::Black,
+//     sf::Color::Green,
+//     sf::Color::Red,
+//     sf::Color(128, 128, 128)
+// };
+
+void Run(Graph& g, int window_size, std::vector<int>& path);
+void DrawCircle(Graph& g, int window_size, sf::RenderWindow& window);
+void DrawRibs(Graph& g, sf::RenderWindow& window, int window_size, int circle_raduis_);
+void DrawPoints(Graph& g, sf::RenderWindow& window, 
+                int window_size, int circle_raduis_, std::vector<sf::Color>& colors);
+
+void DrawCurrentNeighbours(Graph& g, sf::RenderWindow& window, 
+                           int window_size, int circle_raduis_,
+                           int counter, std::vector<int> &path);
+
+void DrawCurrentPoint(Graph& g, sf::RenderWindow& window, 
+                      int window_size, int circle_raduis_, 
+                      int counter, std::vector<int> &path);
+
+void AddPointsNumber(Graph& g, sf::RenderWindow& window, 
+                    int window_size, int circle_raduis_, sf::Text &text);
+void AddCost(Graph& g, sf::RenderWindow& window, sf::Text &text);
+
+void DrawColorInfo(Graph& g, sf::RenderWindow& window, 
+                   sf::Text &text, double circle_raduis_);

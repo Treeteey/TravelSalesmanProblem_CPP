@@ -5,7 +5,7 @@ int main() {
     /*Радиус окружности в пикселях
     1 пиксель = единица длины
      */ 
-    double radius = 370; 
+    double radius = 380; 
     int number = 100;
     double price = 10;
     Graph g(number, radius, price);
@@ -26,6 +26,6 @@ int main() {
 
     // show graph
     int window_size = 800;
-    Run(g, window_size);  
+    Run(g, window_size, path);  
     return 0;
 }
