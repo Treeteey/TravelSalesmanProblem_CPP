@@ -14,6 +14,7 @@ sudo apt -y install build-essential
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <iomanip>
 
 
 
@@ -58,8 +59,8 @@ class Graph{
             price_ = 10;
             ClearDistances();  
             CreatePoints(radius_, number_);
-            FillDistances();
             CreateNeighbours(2, 6);
+            FillDistances();
         };
 
         Graph(int number, double radius, double price){
@@ -68,8 +69,8 @@ class Graph{
             price_ = price;
             ClearDistances();  
             CreatePoints(radius_, number_);
-            FillDistances();
             CreateNeighbours(2, 6);                 
+            FillDistances();
         }
 
         void PrintGraph(){
@@ -78,6 +79,8 @@ class Graph{
                 points_[i].print();
             }
         }
+
+        void PrintDistances();
 
     private:
         void ClearDistances(){
@@ -93,6 +96,7 @@ class Graph{
         double Distance(const Point& a, const Point& b);
         void CreateNeighbours(int min_neighbors, int max_neighbors);
         void FillDistances();
+        
 };
 
 std::vector<int> BFS(int start, int end, const Graph &graph);

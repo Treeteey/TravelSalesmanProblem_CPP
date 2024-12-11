@@ -59,7 +59,8 @@ void Graph::CreateNeighbours(int min_neighbors, int max_neighbors) {
         while (points_[i].neighbours_.size() < rand_number_neighbors) {
             int index = dis(e);
             if (i != index // Исключаем саму точку
-                && points_[index].neighbours_.size() < max_neighbors) { // Проверяем, что индекс ещё не добавлен
+                && points_[index].neighbours_.size() < max_neighbors
+                && std::find(points_[i].neighbours_.begin(),points_[i].neighbours_.end(), index) == points_[i].neighbours_.end()) { // Проверяем, что индекс ещё не добавлен
                 // Добавляем связь симметрично
                 points_[i].neighbours_.push_back(index);
                 points_[index].neighbours_.push_back(i);;
@@ -72,8 +73,27 @@ void Graph::CreateNeighbours(int min_neighbors, int max_neighbors) {
 
 void Graph::FillDistances(){
     for(int i = 0; i < number_; i++){
-        for(int j = 0; j < number_; j++){
-            distances_[i][j] = Distance(points_[i], points_[j]);
+        for(int neighbour : points_[i].neighbours_){
+            distances_[i][neighbour] = Distance(points_[i], points_[neighbour]);
+            // distances_[neighbour][i] = distances_[i][neighbour]; 
         }
+    }
+}
+
+// void Graph::FillDistances(){
+//     for(int i = 0; i < number_; i++){
+//         for(int j = 0; j < points_[j].neighbours_.size(); ++j){
+//             distances_[i][j] = Distance(points_[i], points_[j]);
+//             // distances_[j][i] = distances_[i][j];
+//         }
+//     }
+// }
+
+void Graph::PrintDistances(){
+    for(int i = 0; i < number_; i++){
+        for(int j = 0; j < number_; j++){
+            std::cout << std::setw(10) << distances_[i][j] << " "; 
+        }
+        std::cout << std::endl;
     }
 }

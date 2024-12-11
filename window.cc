@@ -2,6 +2,7 @@
 g++ window.cc graph.cc -lsfml-graphics -lsfml-window -lsfml-system
 
 */
+/*
 #include <SFML/Graphics.hpp>
 #include "header.h"
 
@@ -115,3 +116,4 @@ void Run(Graph& g){
         window.display();
     }
 }
+*/

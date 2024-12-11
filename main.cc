@@ -8,7 +8,9 @@ int main() {
     Graph g(number, radius, price);
     g.PrintGraph();
     std::vector<int> path;
-    double total_cost = FindShortestPath(g, 0, 99, path);
-    Run(g);  
+    double total_cost = FindShortestPath(g, 0, number-1, path);
+    std::cout << "Number of visited points = " << path.size();
+    // g.PrintDistances();
+    // Run(g);  
     return 0;
 }
