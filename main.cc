@@ -1,5 +1,16 @@
 #include "header.h"
 
+// bool CheckIndex(std::vector<int>& path){
+//     std::vector<bool> present(100, false);
+//     for(int i = 0; i < path.size(); i++){
+//         present[path[i]] = true;       
+//     }
+//     for(int i = 0; i < 100; i++){
+//         if(!present[i]) return false;
+//     }
+//     return true;
+// }
+
 
 int main() {
     /*Радиус окружности в пикселях
@@ -35,9 +46,10 @@ int main() {
 
     // total distance to travel through all points
     std::cout << "Total distance = " << g.total_length_ << std::endl;
-
     // show graph
     int window_size = 800;
     Run(g, window_size, path);  
     return 0;
 }
+
+
