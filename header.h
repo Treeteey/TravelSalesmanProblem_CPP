@@ -15,6 +15,7 @@ sudo apt -y install build-essential
 #include <chrono>
 #include <cmath>
 #include <iomanip>
+#include <format>
 
 // to draw graph
 #include <SFML/Graphics.hpp>
@@ -99,4 +100,4 @@ void AddCost(Graph& g, sf::RenderWindow& window,
              sf::Text &text, double &total_distance);
 
 void DrawColorInfo(Graph& g, sf::RenderWindow& window, 
-                   sf::Text &text, double circle_raduis_);
+                   sf::Text &text, double circle_raduis_, int current_point);

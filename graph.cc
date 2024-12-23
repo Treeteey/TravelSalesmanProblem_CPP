@@ -31,10 +31,11 @@ int RandomInt(int min, int max){
 
 
 void Point::print(){
-    std::cout << x_ << " " << y_;
+    std::cout << "(" << std::setw(7) << std::setprecision(2) << std::fixed << x_ 
+                << ", " << std::setw(7) << std::setprecision(2)<< y_ << ")";
     std::cout << "  (";
     for(auto neighbor : neighbours_){
-        std::cout << neighbor << " ";
+        std::cout << std::setw(2) << neighbor << " ";
     }
     std::cout << ")" << std::endl;
 }
@@ -164,7 +165,7 @@ void Graph::ClearDistances(){
 
 void Graph::PrintGraph(){
     for(int i = 0; i < number_; ++i){
-        std::cout << i << " ";
+        std::cout << std::setw(3) << i << " ";
         points_[i].print();
     }
 }

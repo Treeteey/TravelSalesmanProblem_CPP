@@ -1,5 +1,5 @@
 FILES = graph.cc  main.cc  solution.cc window.cc 
-GCC = g++ -std=c++17
+GCC = g++ -std=c++20
 OUT = graph
 SFML = -lsfml-graphics -lsfml-window -lsfml-system
 

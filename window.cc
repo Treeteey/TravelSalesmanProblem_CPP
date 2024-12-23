@@ -41,19 +41,25 @@ void Run(Graph& g, int window_size, std::vector<int>& path) {
 
     // Основной цикл
     while (window.isOpen()) {
+        // Обрабатываем события
         sf::Event event;
         while (window.pollEvent(event)) {
+            // Закрытие окна
             if (event.type == sf::Event::Closed) {
                 window.close();
+            // Использование клавиатуры
             }else if(event.type == sf::Event::KeyPressed){
+                // Закрыть окно
                 if(event.key.code == sf::Keyboard::Escape){
                     window.close();
+                // Переход к следующей точке
                 }else if(event.key.code == sf::Keyboard::Right){
                     if(counter < path.size() - 1){
                         counter++;
                         colors[path[counter]] = sf::Color::Green;   
                         total_distance += g.distances_[path[counter - 1]][path[counter]];
                     }
+                // Переход к предыдущей точке
                 }else if(event.key.code == sf::Keyboard::Left){
                     if(counter > 0){
                         colors[path[counter]] = sf::Color::Red;
@@ -78,12 +84,8 @@ void Run(Graph& g, int window_size, std::vector<int>& path) {
         AddPointsNumber(g, window, window_size, circle_raduis_, text_points);
         // добавим цену
         AddCost(g, window, text_cost, total_distance);
-
-        text_cost.setString(std::to_string(counter));
-        text_cost.setPosition(10, 40);
-        window.draw(text_cost);
-
-        DrawColorInfo(g, window, text_cost, circle_raduis_);
+        // добавим информацию о цвете
+        DrawColorInfo(g, window, text_cost, circle_raduis_, path[counter]);
 
         window.display();
     }
@@ -148,7 +150,8 @@ void AddPointsNumber(Graph& g, sf::RenderWindow& window,
 
 void AddCost(Graph& g, sf::RenderWindow& window, 
              sf::Text &text, double &total_distance){
-    text.setString("Total distance:  " + std::to_string(total_distance));
+    std::string total_distance_str = std::format("{:.2f}", total_distance);
+    text.setString("Total distance:  " + total_distance_str);
     text.setPosition(10, 10);
     window.draw(text);
 }
@@ -180,7 +183,7 @@ void DrawCurrentPoint(Graph& g, sf::RenderWindow& window,
 }
 
 void DrawColorInfo(Graph& g, sf::RenderWindow& window, 
-                   sf::Text &text, double circle_raduis_){
+                   sf::Text &text, double circle_raduis_, int current_point){
     sf::CircleShape pointShape(circle_raduis_* 1.2);
     std::vector<sf::Color> colors = {sf::Color::Red, sf::Color::Green, sf::Color(0, 255,255), sf::Color(128, 128, 128)};
     std::vector<std::string> color_names = {"Not visited", "Visited", "Current", "Neighbours"};
@@ -192,4 +195,8 @@ void DrawColorInfo(Graph& g, sf::RenderWindow& window,
         pointShape.setFillColor(colors[i]);
         window.draw(pointShape);
     }
+    // draw current point number
+    text.setString(std::to_string(current_point));
+    text.setPosition(100, 40 + 2 * 20);
+    window.draw(text);
 }
