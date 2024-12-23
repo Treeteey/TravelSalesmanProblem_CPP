@@ -16,6 +16,51 @@
 #include "header.h"
 
 
+
+void Point::print(){
+    std::cout << "(" << std::setw(7) << std::setprecision(2) << std::fixed << x_ 
+                << ", " << std::setw(7) << std::setprecision(2)<< y_ << ")";
+    std::cout << "  (";
+    for(auto neighbor : neighbours_){
+        std::cout << std::setw(2) << neighbor << " ";
+    }
+    std::cout << ")" << std::endl;
+}
+
+
+// ===================== GRAPH =====================
+
+Graph::Graph(){
+    number_ = 100;
+    radius_ = 380;
+    price_ = 10;
+    ClearDistances();  
+    CreatePoints();
+    FillDistances();
+    CreateNeighbours(2, 6);
+    
+};
+
+
+Graph::Graph(int number, double radius, double price){
+    number_ = number;
+    radius_ = radius;            
+    price_ = price;
+    ClearDistances();  
+    CreatePoints();
+    FillDistances();
+    CreateNeighbours(2, 6);             
+}
+
+
+void Graph::PrintGraph(){
+    for(int i = 0; i < number_; ++i){
+        std::cout << std::setw(3) << i << " ";
+        points_[i].print();
+    }
+}
+
+
 /**
  * \brief Generates a random integer within the given range [min, max]
  *
@@ -30,15 +75,7 @@ int RandomInt(int min, int max){
 }
 
 
-void Point::print(){
-    std::cout << "(" << std::setw(7) << std::setprecision(2) << std::fixed << x_ 
-                << ", " << std::setw(7) << std::setprecision(2)<< y_ << ")";
-    std::cout << "  (";
-    for(auto neighbor : neighbours_){
-        std::cout << std::setw(2) << neighbor << " ";
-    }
-    std::cout << ")" << std::endl;
-}
+
 
 
 /**
@@ -53,23 +90,18 @@ void Point::print(){
  * if the distance from the origin to the point is less than or equal to the radius.
  * If the point is within the circle, it is added to the list of points.
  */
-void Graph::CreatePoints(double radius, int count){
-    int temp = count;    
-
-    while (temp > 0) {
-        std::random_device rd;
-        std::mt19937 e(rd());
-        std::uniform_real_distribution<> dis(-radius_, radius_);
-
+void Graph::CreatePoints(){
+    int temp = 0;    
+    std::random_device rd;
+    std::mt19937 e(rd());
+    std::uniform_real_distribution<> dis(-radius_, radius_);
+    while (temp < number_) {
         double x = dis(e);
         double y = dis(e);
-        double distance = x * x + y * y;
-        double rad_sqr = radius * radius;
-
-        // Optional: Recheck to ensure the point is within the circle
-        if (distance <= rad_sqr) {
+        // Recheck to ensure the point is within the circle
+        if ((radius_ * radius_) >= (x * x + y * y)) {
             points_.push_back(Point(x, y));
-            temp--;
+            temp+=1;
         }
     }
 }
@@ -101,9 +133,17 @@ void Graph::CreateNeighbours(int min_neighbors, int max_neighbors) {
     for (int i = 0; i < points_.size(); ++i) {
         // Случайное число соседей для текущей точки
         int rand_number_neighbors = dis_int(e);
-
+        // Вектор пар (индекс, расстояние) по увеличению расстояний
+        std::vector<std::pair<int, double>> temp;
+        for (int j = 0; j < points_.size(); ++j) {
+            temp.push_back(std::make_pair(j, distances_[i][j]));
+        }
+        std::sort(temp.begin(), temp.end(), [](const auto& a, const auto& b) {
+            return a.second < b.second;
+        });
+        int counter = 0;
         while (points_[i].neighbours_.size() < rand_number_neighbors) {
-            int index = dis(e);
+            int index = temp[counter].first;
             if (i != index // Исключаем саму точку
                 && points_[index].neighbours_.size() < max_neighbors
                 && std::find(points_[i].neighbours_.begin(),points_[i].neighbours_.end(), index) == points_[i].neighbours_.end()) { // Проверяем, что индекс ещё не добавлен
@@ -111,6 +151,7 @@ void Graph::CreateNeighbours(int min_neighbors, int max_neighbors) {
                 points_[i].neighbours_.push_back(index);
                 points_[index].neighbours_.push_back(i);;
             }
+            counter++;
         }
     }
 }
@@ -129,20 +170,33 @@ void Graph::CreateNeighbours(int min_neighbors, int max_neighbors) {
  */
 void Graph::FillDistances(){
     for(int i = 0; i < number_; i++){
-        for(int neighbour : points_[i].neighbours_){
-            distances_[i][neighbour] = Distance(points_[i], points_[neighbour]);
+        for(int j = 0; j < number_; j++){
+            distances_[i][j] = Distance(points_[i], points_[j]);
         }
+        distances_[i][i] = -1.0;
     }
 }
 
-void Graph::PrintDistances(){
-    for(int i = 0; i < number_; i++){
-        for(int j = 0; j < number_; j++){
-            std::cout << std::setw(10) << distances_[i][j] << " "; 
-        }
-        std::cout << std::endl;
+void Graph::WriteDistancesToFile() {
+    std::ofstream file("distances.txt");
+    if (!file.is_open()) {
+        std::cerr << "Error opening file for writing." << std::endl;
+        return;
     }
+
+    for (int i = 0; i < number_; i++) {
+        for (int j = 0; j < number_; j++) {
+            file << std::setw(8) << distances_[i][j] << " ";
+            if(j % 10 == 9) 
+                file << " [" << j+1 << "] ";
+        }
+        file << std::endl;
+    }
+
+    file.close();
 }
+
+
 
 
 /**
@@ -163,31 +217,5 @@ void Graph::ClearDistances(){
 }
 
 
-void Graph::PrintGraph(){
-    for(int i = 0; i < number_; ++i){
-        std::cout << std::setw(3) << i << " ";
-        points_[i].print();
-    }
-}
 
 
-Graph::Graph(){
-    number_ = 100;
-    radius_ = 1;
-    price_ = 10;
-    ClearDistances();  
-    CreatePoints(radius_, number_);
-    CreateNeighbours(2, 6);
-    FillDistances();
-};
-
-
-Graph::Graph(int number, double radius, double price){
-    number_ = number;
-    radius_ = radius;            
-    price_ = price;
-    ClearDistances();  
-    CreatePoints(radius_, number_);
-    CreateNeighbours(2, 6);                 
-    FillDistances();
-}

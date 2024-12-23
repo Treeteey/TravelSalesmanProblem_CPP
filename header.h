@@ -15,7 +15,8 @@ sudo apt -y install build-essential
 #include <chrono>
 #include <cmath>
 #include <iomanip>
-#include <format>
+#include <fstream>
+
 
 // to draw graph
 #include <SFML/Graphics.hpp>
@@ -52,14 +53,14 @@ class Graph{
         Graph();
         Graph(int number, double radius, double price);
         void PrintGraph();
-        void PrintDistances();
 
     private:
         void ClearDistances();
-        void CreatePoints(double radius, int count);
+        void CreatePoints();
         double Distance(const Point& a, const Point& b);
         void CreateNeighbours(int min_neighbors, int max_neighbors);
         void FillDistances();
+        void WriteDistancesToFile();
         
 };
 
@@ -101,3 +102,8 @@ void AddCost(Graph& g, sf::RenderWindow& window,
 
 void DrawColorInfo(Graph& g, sf::RenderWindow& window, 
                    sf::Text &text, double circle_raduis_, int current_point);
+
+
+
+// ============== TEMP ================
+void RunByStep(Graph& g, int window_size, std::vector<int>& path);

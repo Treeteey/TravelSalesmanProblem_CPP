@@ -1,16 +1,5 @@
 #include "header.h"
 
-// bool CheckIndex(std::vector<int>& path){
-//     std::vector<bool> present(100, false);
-//     for(int i = 0; i < path.size(); i++){
-//         present[path[i]] = true;       
-//     }
-//     for(int i = 0; i < 100; i++){
-//         if(!present[i]) return false;
-//     }
-//     return true;
-// }
-
 
 int main() {
     /*Радиус окружности в пикселях
@@ -31,12 +20,12 @@ int main() {
         std::cout << "Input end point: "; 
         std::cin >> end;
     }while(end < 0 || end > 99);
-
     g.PrintGraph();
 
     std::vector<int> path;
     FindShortestPath(g, start, end, path);
-    
+    std::cout << "Radius = " << g.radius_ << std::endl;
+    std::cout << "Number of points = " << g.number_ << std::endl;
     std::cout << "Number of visited points = " << path.size() << std::endl;
     
     // path
