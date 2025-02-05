@@ -60,8 +60,7 @@ class Graph{
         double Distance(const Point& a, const Point& b);
         void CreateNeighbours(int min_neighbors, int max_neighbors);
         void FillDistances();
-        void WriteDistancesToFile();
-        
+        void WriteDistancesToFile();        
 };
 
 

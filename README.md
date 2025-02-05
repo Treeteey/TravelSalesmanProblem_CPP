@@ -1,7 +1,7 @@
 ## TSP MadDevs
 
 
-- На линукс:
+### На линукс:
 1) скачать SFLM:   
 `sudo apt-get install libsfml-dev`
 
@@ -10,15 +10,13 @@
 3) Запустить: `make`
 ---
 
-- На Windows я не смог скачать SFLM - картинки у меня нет. Поэтому в makefile изменить строчки на:
+### На Windows 
 
-1) `FILES = graph.cc  main.cc  solution.cc #window.cc `
-
-2) `SFML = #-lsfml-graphics -lsfml-window -lsfml-system`
-
-- в header.h:
-
-1) `//#include <SFML/Graphics.hpp>`
+### Install sflm on Windows using vcpkg
+    1) `git clone https://github.com/microsoft/vcpkg.git`
+    2) `cd vcpkg; .\bootstrap-vcpkg.bat`
+    3) add to Path `vcpkg.exe` location
+    4) `vcpkg install sfml`
 
 ---
 ## Входные данные
@@ -35,5 +33,5 @@
 ![screens](screens/graph_view_100.png)
 
 
-Некоторые точки выходят за границы круга. почему? честно не представляю, возможно из-за функции рандома или архитектуры системы
+Некоторые точки выходят за границы круга - проблема отображения, согласно координатам они входят в окружность заданного радиуса
 
