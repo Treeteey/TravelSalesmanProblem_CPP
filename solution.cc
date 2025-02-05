@@ -171,11 +171,11 @@ void FindShortestPath(Graph &graph, int start, int end, std::vector<int>& fullpa
         }
         // считаем расстояние и добавляем путь от  current до next_point
         
-        std::cout << "Add subpath ";
-        for(int i = 0; i < subPath.size(); ++i){
-            std::cout << subPath[i] << " ";            
-        }
-        std::cout << std::endl;
+        // std::cout << "Add subpath ";
+        // for(int i = 0; i < subPath.size(); ++i){
+        //     std::cout << subPath[i] << " ";            
+        // }
+        // std::cout << std::endl;
 
         // current = next_point;
         current = AddSubpath(fullpath, subPath, total_distance, graph, visited);
@@ -212,7 +212,7 @@ void SearchClosestNeighbour(Graph &graph, std::vector<bool> &visited, std::vecto
             }
         }
     }
-    std::cout << "next_point = " << next_point << std::endl;
+    // std::cout << "next_point = " << next_point << std::endl;
 }
 
 void SearchNextPoint(Graph &graph, int &back_size, int &next_point, 
@@ -241,7 +241,7 @@ void SearchNextPoint(Graph &graph, int &back_size, int &next_point,
             back_size -= 1;
         }
     }
-    std::cout << "next_point = " << next_point << std::endl;
+    // std::cout << "next_point = " << next_point << std::endl;
 }
 
 

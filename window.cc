@@ -17,10 +17,12 @@ void Run(Graph& g, int window_size, std::vector<int>& path) {
 
     // Создаем шрифт
     sf::Font font; // to add text
-    font.loadFromFile("CalibriSchool.ttf");
+    // font.loadFromFile("CalibriSchool.ttf");
     if(!font.loadFromFile("CalibriSchool.ttf")){ // if file not found
         std::cout << "File not found" << std::endl;
     }
+
+
     sf::Text text_points;
     text_points.setFont(font);
     text_points.setCharacterSize(10);
